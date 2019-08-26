@@ -9,15 +9,11 @@ import argparse
 import cv2
 import imutils
 
-# construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required = True,
-	help = "Path to the image to be scanned")
-args = vars(ap.parse_args())
+img_path = "data/accident_forms/MVIMG_20190823_180455.jpg"
 
 # load the image and compute the ratio of the old height
 # to the new height, clone it, and resize it
-image = cv2.imread(args["image"])
+image = cv2.imread(img_path)
 ratio = image.shape[0] / 500.0
 orig = image.copy()
 image = imutils.resize(image, height = 500)
@@ -76,16 +72,18 @@ cv2.imshow("Original", imutils.resize(orig, height = 650))
 cv2.imshow("Scanned", imutils.resize(warped, height = 650))
 wraped_img = imutils.resize(warped, height = 650, ) # due to fixed (aspact ratio) height we are unble to give fixed width
 
+# middle
 x = 172
 y= 81
 w = 143
 h = 386
 
-crop_img = wraped_img[y:y+h, x:x+w]
-cv2.imshow("cropped", crop_img)
+
+middle_crop_img = wraped_img[y:y+h, x:x+w]
+cv2.imshow("middle_cropped", middle_crop_img)
 
 
-cv2.imwrite("croped_final.png", crop_img)
+cv2.imwrite("croped_final.png", middle_crop_img)
 final_img = cv2.imwrite("scanned_final_2.png",wraped_img)
 #cv2.imwrite(final_img)
 cv2.waitKey(0)
