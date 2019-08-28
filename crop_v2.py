@@ -80,7 +80,10 @@ def perspectiveTransform(orig, screenCnt, ratio):
 
 
 def segmentation(img,x,y,weidth,height):
-    img = img[y:y+h,x:x+h]
+    img = img[y:y+height,x:x+weidth]
+    cv2.imshow("segmented",img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     return img
 
 if __name__ == "__main__":
@@ -91,5 +94,54 @@ if __name__ == "__main__":
 
     edged_image, original_resized_image, ratio= edgeDetect(image_path)
     contoured_image, screencnt= contours(edged_image, original_resized_image)
-    #print(four_point_transform((original_image), screencnt.reshape(4, 2) * ratio))
     perspectiveTransformed_image = perspectiveTransform(original_image, screencnt, ratio)
+
+    x = 170
+    y= 81
+    weidth = 135
+    height = 386
+
+    middle_section = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'Middle_section',(x+2,y+10),0,0.3,(0,255,0))
+    
+
+    x = 16
+    y = 84
+    weidth = 164
+    height = 376
+
+    A_section = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'A_section',(x+2,y+10),0,0.3,(0,255,0))
+
+    x = 296
+    y = 84
+    weidth = 163
+    height = 379
+
+    B_section = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'B_section',(x+2,y+10),0,0.3,(0,255,0))
+
+    x = 95
+    y = 454
+    weidth = 283 
+    height = 138
+
+    Drawing = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'Drawing',(x+2,y+10),0,0.3,(0,255,0))
+
+    x = 155
+    y = 586
+    weidth = 179 
+    height = 49
+
+    signature = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'Signature',(x+2,y+10),0,0.3,(0,255,0))
+
+    cv2.imshow("boxed", perspectiveTransformed_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
