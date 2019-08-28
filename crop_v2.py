@@ -88,7 +88,7 @@ def segmentation(img,x,y,weidth,height):
 
 if __name__ == "__main__":
     
-    image_path = "data/accident_forms/MVIMG_20190823_180503.jpg"
+    image_path = "data/accident_forms/1566566729259.JPEG"
 
     original_image = cv2.imread(image_path)
 
@@ -141,6 +141,15 @@ if __name__ == "__main__":
     signature = segmentation(perspectiveTransformed_image,x,y,weidth,height)
     cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
     cv2.putText(perspectiveTransformed_image,'Signature',(x+2,y+10),0,0.3,(0,255,0))
+
+    x = 18
+    y = 30
+    weidth = 457 
+    height = 58
+
+    top_sction = segmentation(perspectiveTransformed_image,x,y,weidth,height)
+    cv2.rectangle(perspectiveTransformed_image,(x,y),(x+weidth,y+height),(0,255,0),2)
+    cv2.putText(perspectiveTransformed_image,'Top section',(x+2,y+10),0,0.3,(0,255,0))
 
     cv2.imshow("boxed", perspectiveTransformed_image)
     cv2.waitKey(0)
