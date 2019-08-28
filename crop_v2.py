@@ -27,7 +27,7 @@ def edgeDetect(image):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    return edged, image
+    return edged, image, ratio
 
 
 def contours(edged,image):
@@ -56,9 +56,9 @@ def contours(edged,image):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    return image 
+    return image, screenCnt
 
-def perspectiveTransform():    
+def perspectiveTransform(orig, screenCnt, ratio):    
     # apply the four point transform to obtain a top-down
     # view of the original image
     warped = four_point_transform(orig, screenCnt.reshape(4, 2) * ratio)
@@ -73,6 +73,8 @@ def perspectiveTransform():
     print("STEP 3: Apply perspective transform")
     cv2.imshow("Original", imutils.resize(orig, height = 650))
     cv2.imshow("Scanned", imutils.resize(warped, height = 650))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     return imutils.resize(warped, height = 650)
 
@@ -87,6 +89,7 @@ if __name__ == "__main__":
 
     original_image = cv2.imread(image_path)
 
-    edged_image, original_resized_image = edgeDetect(image_path)
-    contoured_image = contours(edged_image, original_resized_image)
-    #perspectiveTransformed_image = perspectiveTransform(contoured_image)
+    edged_image, original_resized_image, ratio= edgeDetect(image_path)
+    contoured_image, screencnt= contours(edged_image, original_resized_image)
+    #print(four_point_transform((original_image), screencnt.reshape(4, 2) * ratio))
+    perspectiveTransformed_image = perspectiveTransform(original_image, screencnt, ratio)
