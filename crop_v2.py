@@ -1,4 +1,4 @@
-from pyimagesearch.transform import four_point_transform
+from durgesh.transform import four_point_transform
 from skimage.filters import threshold_local
 import numpy as np
 import argparse
@@ -27,7 +27,7 @@ def edgeDetect(image):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    return edged
+    return edged, image
 
 
 def contours(edged,image):
@@ -80,3 +80,13 @@ def perspectiveTransform():
 def segmentation(img,x,y,weidth,height):
     img = img[y:y+h,x:x+h]
     return img
+
+if __name__ == "__main__":
+    
+    image_path = "data/accident_forms/MVIMG_20190823_180503.jpg"
+
+    original_image = cv2.imread(image_path)
+
+    edged_image, original_resized_image = edgeDetect(image_path)
+    contoured_image = contours(edged_image, original_resized_image)
+    #perspectiveTransformed_image = perspectiveTransform(contoured_image)
