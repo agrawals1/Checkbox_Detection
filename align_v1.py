@@ -55,12 +55,12 @@ def alignImages(im1, im2):
 if __name__ == '__main__':
   
   # Read reference image
-  refFilename = r"C:\Users\durge\PycharmProjects\Checkbox_Detection\scanned_final_2.png"
+  refFilename = r"scanned_final_2.png"
   print("Reading reference image : ", refFilename)
   imReference = cv2.imread(refFilename, cv2.IMREAD_COLOR)
 
   # Read image to be aligned
-  imFilename = r"C:\Users\durge\PycharmProjects\Checkbox_Detection\data\accident_forms\MVIMG_20190823_180503.jpg"
+  imFilename = r"data/accident_forms/MVIMG_20190823_180455.jpg"
   print("Reading image to align : ", imFilename);  
   im = cv2.imread(imFilename, cv2.IMREAD_COLOR)
   im = imutils.resize(im, height= 700)

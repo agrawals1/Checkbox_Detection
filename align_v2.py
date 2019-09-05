@@ -2,6 +2,8 @@ from __future__ import print_function
 import cv2
 import numpy as np
 import imutils
+from skimage.filters import threshold_local
+
 
 
 MAX_MATCHES = 80000
@@ -53,6 +55,35 @@ def alignImages(im1, im2):
   
   return im1Reg, h
 
+def makeitwhite(img):
+  #-----Converting image to LAB Color model----------------------------------- 
+  lab= cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+  cv2.imshow("lab",lab)
+  cv2.waitKey(0)
+  #-----Splitting the LAB image to different channels-------------------------
+  l, a, b = cv2.split(lab)
+  cv2.imshow('l_channel', l)
+  cv2.imshow('a_channel', a)
+  cv2.imshow('b_channel', b)
+  cv2.waitKey(0)
+
+  #-----Applying CLAHE to L-channel-------------------------------------------
+  clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
+  cl = clahe.apply(l)
+  cv2.imshow('CLAHE output', cl)
+  cv2.waitKey(0)
+  #-----Merge the CLAHE enhanced L-channel with the a and b channel-----------
+  limg = cv2.merge((cl,a,b))
+  cv2.imshow('limg', limg)
+  cv2.waitKey(0)
+  #-----Converting image from LAB Color model to RGB model--------------------
+  final = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+  cv2.imshow('final', final)
+  cv2.waitKey(0)
+
+  return final
+
+
 
 if __name__ == '__main__':
   
@@ -60,12 +91,12 @@ if __name__ == '__main__':
   refFilename = r"scanned_final_2.png"
   print("Reading reference image : ", refFilename)
   imReference = cv2.imread(refFilename, cv2.IMREAD_COLOR)
-
+  imReference = imutils.resize(imReference, height= 1500)
   # Read image to be aligned
   imFilename = r"data/accident_forms/MVIMG_20190823_180455.jpg"
   print("Reading image to align : ", imFilename);  
   im = cv2.imread(imFilename, cv2.IMREAD_COLOR)
-  im = imutils.resize(im, height= 700)
+  im = imutils.resize(im, height= 1500)
   
   cv2.imshow("reference", imReference)
   cv2.waitKey(0)
@@ -79,6 +110,14 @@ if __name__ == '__main__':
   # Write aligned image to disk. 
   outFilename = "aligned_2.jpg"
   print("Saving aligned image : ", outFilename); 
+
+  imReg = makeitwhite(imReg)
+
+  imReg = cv2.cvtColor(imReg, cv2.COLOR_BGR2GRAY)
+  T = threshold_local(imReg, 11, offset = 10, method = "gaussian")
+  imReg = (imReg > T).astype("uint8") * 255
+
+
   cv2.imwrite(outFilename, imReg)
   cv2.imshow("alligned", imReg)
   cv2.waitKey(0)
