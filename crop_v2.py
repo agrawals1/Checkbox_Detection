@@ -88,7 +88,7 @@ def segmentation(img,x,y,weidth,height):
 
 if __name__ == "__main__":
     
-    image_path = "data/accident_forms/MVIMG_20190823_180455.jpg"
+    image_path = r"C:\Users\durge\PycharmProjects\Checkbox_Detection\data\accident_forms\1566566729259.JPEG"
 
     original_image = cv2.imread(image_path)
 
