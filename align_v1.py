@@ -32,7 +32,10 @@ def alignImages(im1, im2):
 
   # Draw top matches
   imMatches = cv2.drawMatches(im1, keypoints1, im2, keypoints2, matches, None)
-  cv2.imwrite("matches.jpg", imMatches)
+  cv2.imwrite("matches.jpg", imMatches) 
+  cv2.imshow("Matches", imMatches)
+  cv2.waitKey(0)
+ 
   
   # Extract location of good matches
   points1 = np.zeros((len(matches), 2), dtype=np.float32)
@@ -58,12 +61,19 @@ if __name__ == '__main__':
   refFilename = r"scanned_final_2.png"
   print("Reading reference image : ", refFilename)
   imReference = cv2.imread(refFilename, cv2.IMREAD_COLOR)
+  imReference = imutils.resize(imReference, height= 1000)
+  cv2.imshow("reference", imReference)
+  cv2.waitKey(0)
+
 
   # Read image to be aligned
-  imFilename = r"data/accident_forms/MVIMG_20190823_180455.jpg"
+  imFilename = r"data\accident_forms\MVIMG_20190823_180455.jpg"
   print("Reading image to align : ", imFilename);  
   im = cv2.imread(imFilename, cv2.IMREAD_COLOR)
-  im = imutils.resize(im, height= 700)
+  im = imutils.resize(im, height= 1000)
+  cv2.imshow("To be aligned", im)
+  cv2.waitKey(0)
+
   
   print("Aligning images ...")
   # Registered image will be resotred in imReg. 
@@ -74,7 +84,11 @@ if __name__ == '__main__':
   outFilename = "aligned_2.jpg"
   print("Saving aligned image : ", outFilename); 
   cv2.imwrite(outFilename, imReg)
+  cv2.imshow("aligned", imReg)
+  cv2.waitKey(0)
 
   # Print estimated homography
   print("Estimated homography : \n",  h)
   
+  cv2.waitKey(0)
+  cv2.destroyAllWindows()
